@@ -1,3 +1,13 @@
+/*
+File:        Bluetooth_Code_v2.ino
+Author:      Lukasz Janik
+Date:        2025-03-26
+Description: 
+  The code sets up a Bluetooth communication system where the state of a button controls the scores displayed on an LCD screen. 
+    Data is exchanged between the Bluetooth module and the Serial monitor, and the scores are updated accordingly.
+Version:     2.0
+*/
+
 #include <SoftwareSerial.h>
 #include <LiquidCrystal.h>
 
