@@ -3,8 +3,10 @@ File:        inhole_scoreboard_v3.ino
 Author:      Lukasz Janik
 Date:        2025-03-26
 Description: 
-    The code sets up a scoreboard system with a color sensor and buttons to manually adjust scores. 
-        It reads the RGB values from the sensor, updates the scores based on detected colors, and displays the scores on an LCD screen.
+    This Arduino code implements a scoreboard system for a game, 
+        where it utilizes color sensors and buttons to manage and update the scores of two teams (red and blue). 
+        It detects colors using sensors, adjusts scores based on color detection or manual button inputs, 
+        and displays the current and total scores on an LCD screen while managing the round states (active, manual, or confirm).
 Version:     3.0
 */
 
