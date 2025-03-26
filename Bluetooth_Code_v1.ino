@@ -1,3 +1,13 @@
+/*
+File:        Bluetooth_Code_v1.ino
+Author:      Lukasz Janik
+Date:        2025-03-26
+Description: 
+  The code essentially sets up a Bluetooth communication system where the state of a button controls the state of two LEDs, 
+    and data is exchanged between the Bluetooth module and the Serial monitor.
+Version:     1.0
+*/
+
 #include <SoftwareSerial.h>
 
 // Define Bluetooth Pins
