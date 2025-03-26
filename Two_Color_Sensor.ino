@@ -1,3 +1,14 @@
+/*
+File:        Two_Color_Sensor.ino
+Author:      Lukasz Janik
+Date:        2025-03-26
+Description: 
+  The code sets up a system with two color sensors. 
+     It reads the RGB values from each sensor and turns on the corresponding LED based on the detected color. 
+     The RGB values are also printed to the Serial monitor.
+Version:     1.0
+*/
+
 //Sensor A pinout
 #define s0 8        
 #define s1 9
