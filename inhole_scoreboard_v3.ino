@@ -37,12 +37,21 @@ LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 //Sensor A's Unique Pinout
 #define out_a 26
 
+//Sensor B's Unique Pinout
+#define out_b 27
+
 // Sensor A LEDs
 #define R_LED_A 32
 #define G_LED_A 34
 #define B_LED_A 36
 
+//Sensor B LEDs
+#define R_LED_B 33
+#define G_LED_B 35
+#define B_LED_B 37
+
 int  Red_A=0, Blue_A=0, Green_A=0;  //RGB values for Sensor A
+int  Red_B=0, Blue_B=0, Green_B=0;  //RGB values for Sensor B
 
 void setup() {
     lcd.begin(16, 2);
@@ -58,11 +67,15 @@ void setup() {
     pinMode(s2,OUTPUT);
     pinMode(s3,OUTPUT);
     pinMode(out_a,INPUT);
+    pinMode(out_b,INPUT);
 
     //LED Pins
     pinMode(R_LED_A,OUTPUT);
     pinMode(G_LED_A,OUTPUT);
     pinMode(B_LED_A,OUTPUT);
+    pinMode(R_LED_B,OUTPUT);
+    pinMode(G_LED_B,OUTPUT);
+    pinMode(B_LED_B,OUTPUT);
 
     Serial.begin(9600); 
     digitalWrite(s0, HIGH);
@@ -159,25 +172,34 @@ void GetColors() {
     static bool blueDetected_A = false;  // Flag to track when a blue bag has been detected
     static bool greenDetected_A = false;  // Flag to track when a green background has been detected
 
+    static bool redDetected_B = false;  // Flag to track when a red bag has been detected
+    static bool blueDetected_B = false;  // Flag to track when a blue bag has been detected
+    static bool greenDetected_B = false;  // Flag to track when a green background has been detected
     //static unsigned long lastDetectionTime = 0; // Time of last detection
 
     digitalWrite(s2, LOW); 
     digitalWrite(s3, LOW);                                           
     Red_A = pulseIn(out_a, digitalRead(out_a) == HIGH ? LOW : HIGH);
+    Red_B = pulseIn(out_b, digitalRead(out_b) == HIGH ? LOW : HIGH);
     Serial.println("Red");        
     Serial.println(Red_A);
+    Serial.println(Red_B);
     delay(20);  
     digitalWrite(s2, HIGH); 
     digitalWrite(s3, HIGH);   
     Green_A = pulseIn(out_a,  digitalRead(out_a) == HIGH ? LOW : HIGH);
+    Green_B = pulseIn(out_b,  digitalRead(out_b) == HIGH ? LOW : HIGH);
     Serial.println("Green"); 
     Serial.println(Green_A);
+    Serial.println(Green_B);
     delay(20);  
     digitalWrite(s2, LOW); 
     digitalWrite(s3, HIGH);         
     Blue_A = pulseIn(out_a, digitalRead(out_a) == HIGH ? LOW  : HIGH);
+    Blue_B = pulseIn(out_b, digitalRead(out_b) == HIGH ? LOW  : HIGH);
     Serial.println("Blue"); 
     Serial.println(Blue_A);
+    Serial.println(Blue_B);
     Serial.println("____________________________________________________");
     delay(20);  
 
@@ -207,22 +229,53 @@ void GetColors() {
       greenDetected_A = false;
       blueDetected_A = false;
     }
+
+    //Sensor B's Comparison
+    if ((Red_B<Blue_B) && (Red_B<Green_B)){ //Red Threshold
+      digitalWrite(R_LED_B, HIGH);
+      digitalWrite(G_LED_B, LOW);
+      digitalWrite(B_LED_B, LOW);
+      redDetected_B = true;
+    } else if (Green_B<Blue_B){
+      if((Green_B<=Red_B) || (abs(Green_B-Red_B)<30)){ //Green Threshold
+        digitalWrite(R_LED_B, LOW);
+        digitalWrite(G_LED_B, HIGH);
+        digitalWrite(B_LED_B, LOW);
+        greenDetected_B = true;
+      }
+    } else if ((Blue_B<Red_B) && (Blue_B<Green_B)){ //Blue Threshold
+      digitalWrite(R_LED_B, LOW);
+      digitalWrite(G_LED_B, LOW);
+      digitalWrite(B_LED_B, HIGH);
+      blueDetected_B = true;
+    } else {
+      digitalWrite(R_LED_B, HIGH);
+      digitalWrite(G_LED_B, HIGH);
+      digitalWrite(B_LED_B, HIGH);
+      redDetected_B = false;
+      greenDetected_B = false;
+      blueDetected_B = false;
+    }
+    //greenDetected_B = true;
     
     //delay(2000);
     
-    while(greenDetected_A == true){
-      if(redDetected_A == true){
+    while(greenDetected_A == true && greenDetected_B == true){
+      if(redDetected_A == true || redDetected_B == true){
         redScore = redScore + 3;
       }
-      if(blueDetected_A == true){
+      if(blueDetected_A == true || blueDetected_B == true){
         blueScore = blueScore + 3;
       }
 
       redDetected_A = false;
       greenDetected_A = false;
       blueDetected_A = false;
+
+      redDetected_B = false;
+      greenDetected_B = false;
+      blueDetected_B = false;
     }
 
     updateLCD();
 }
-
