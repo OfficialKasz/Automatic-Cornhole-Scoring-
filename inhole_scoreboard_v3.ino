@@ -1,3 +1,13 @@
+/*
+File:        inhole_scoreboard_v3.ino
+Author:      Lukasz Janik
+Date:        2025-03-26
+Description: 
+    The code sets up a scoreboard system with a color sensor and buttons to manually adjust scores. 
+        It reads the RGB values from the sensor, updates the scores based on detected colors, and displays the scores on an LCD screen.
+Version:     3.0
+*/
+
 #include <LiquidCrystal.h>
 
 // Define button pins
